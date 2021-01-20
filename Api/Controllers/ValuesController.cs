@@ -11,11 +11,11 @@ namespace Api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values        
+        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            Log.Debug("Got into Values - GET");
+            Log.Information("Got into Values - GET");
             return new string[] { "value1", "value2" };
         }
 
@@ -25,9 +25,11 @@ namespace Api.Controllers
         {
             if (id == 123)
             {
-                throw new Exception("This message should NOT be seen by the caller!!");
+                var ex = new Exception("This message should NOT be seen by the caller!!");
+                Log.Error("Got into Values - GET", ex);
+                throw ex;
             }
-            
+
             return "value";
         }
 

@@ -8,6 +8,7 @@ using Serilog.Filters;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.Elasticsearch;
 using Elastic.CommonSchema.Serilog;
+using Microsoft.AspNetCore.Http;
 
 namespace Middleware.Serilog
 {
@@ -32,19 +33,23 @@ namespace Middleware.Serilog
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", $"{name.Name}")
                 .Enrich.WithProperty("Version", $"{name.Version}")
-                .WriteTo.File(compactJson, $@"C:\temp\Logs\{applicationName}-All.json")
+                //.WriteTo.File(compactJson, $@"d:\Logs\{applicationName}\All.json")
                 .WriteTo.Logger(lc => lc
-                    .Filter.ByIncludingOnly(Matching.WithProperty("UsageName"))
-                    .WriteTo.File(ecsText, $@"C:\temp\Logs\{applicationName}.json")
-                    .WriteTo.Logger(lc2 => lc2
-                        .Filter.ByExcluding(Matching.WithProperty("UsageName"))
-                        .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://elastictest01:9200"))
-                        {
-                            AutoRegisterTemplate = true,
-                            AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                            IndexFormat = "log-{0:yyyy.MM.dd}"
-                        }
-        )));
+                    //.Filter.ByIncludingOnly(Matching.WithProperty("UsageName"))
+                    .WriteTo.File(ecsText, $@"d:\Logs\{applicationName}\log-.json", rollingInterval: RollingInterval.Day)
+                //.WriteTo.Logger(lc2 => lc2
+                //    .Filter.ByExcluding(Matching.WithProperty("UsageName"))
+                //    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://elastictest01:9200"))
+                //    {
+                //        AutoRegisterTemplate = true,
+                //        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                //        IndexFormat = "log-{0:yyyy.MM.dd}"
+                //    }
+                //)
+                //)
+                );
+
+            Log.Information("Session started");
         }
 
         public static IApplicationBuilder UseSimpleSerilogRequestLogging(this IApplicationBuilder app)
