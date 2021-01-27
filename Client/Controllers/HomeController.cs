@@ -69,7 +69,7 @@ namespace Client.Controllers
             var token = await HttpContext.GetTokenAsync("id_token");  // consciously getting wrong token here
             client.SetBearerToken(token);
 
-            var response = await GetWithHandlingAsync(client, "https://localhost:52109/api/Values");
+            var response = await GetWithHandlingAsync(client, "https://elastictest01:52109/api/Values");
 
             ViewBag.Json = await response.Content.ReadAsStringAsync();
             return View("BadApi");  // should never really get here....

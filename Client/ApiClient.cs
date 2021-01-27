@@ -13,7 +13,7 @@ namespace Client
 
         public ApiClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("https://localhost:44389/api/");
+            client.BaseAddress = new Uri("https://elastictest01:44389/api/");
             _client = client;
         }
 
